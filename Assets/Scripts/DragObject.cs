@@ -51,7 +51,7 @@ public class DragObject : MonoBehaviour
         _screenPositionActionMap.Enable();
 
         _screenPositionActionMap.performed += context => { _cursorScreenPosition = context.ReadValue<Vector2>(); };
-        _pressActionMap.performed += _ => { StartCoroutine(DragCursor()); };
+        _pressActionMap.performed += _ => { if(_isClickedOn)StartCoroutine(DragCursor()); };
         _pressActionMap.canceled += _ => { _isDragging = false; };
     }
 
@@ -60,7 +60,7 @@ public class DragObject : MonoBehaviour
         _isDragging = true;
         Vector3 offset = transform.position - _worldPosition;
         // Starts to drag objects
-        _rigidbody.isKinematic = true;
+        _rigidbody.useGravity = true;
         while (_isDragging)
         {
             // Dragging objects
@@ -68,28 +68,7 @@ public class DragObject : MonoBehaviour
             yield return null;
         }
         // Dropping objects
-        _rigidbody.isKinematic = false;
+        _rigidbody.useGravity = false;
     }
-    // private Vector3 _offset;
-    //
-    // private float _zCoordinate;
-    // private void OnMouseDown()
-    // {
-    //     if (Camera.main != null) _zCoordinate = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
-    //     _offset = gameObject.transform.position - GetMouseWorldPos();
-    // }
-    //
-    // private void OnMouseDrag()
-    // {
-    //     transform.position = GetMouseWorldPos() + _offset;
-    // }
-    //
-    // private Vector3 GetMouseWorldPos()
-    // {
-    //     Vector3 mousePoint = Input.mousePosition;
-    //     mousePoint.z = _zCoordinate;
-    //     return Camera.main.ScreenToViewportPoint(mousePoint);
-    // }
-
 
 }
