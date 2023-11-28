@@ -17,7 +17,7 @@ namespace Course_Library.Scripts.Player
             StartCoroutine(currentState.Start(_player));
         }
 
-        public void OnPlayerJump()
+        public void Jumping()
         {
             StartCoroutine(currentState.Jumping(_player));
         }
