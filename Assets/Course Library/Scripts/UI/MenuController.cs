@@ -72,6 +72,7 @@ public class MenuController : MonoBehaviour
         for (int i = 0; i < numberOfCardsSpawn; i++)
         {
             var card = Instantiate(cardToSpawn, cardParentTransform);
+            card.SetActive(true);
             cards.Add(card);
 
             if (i == 0)
