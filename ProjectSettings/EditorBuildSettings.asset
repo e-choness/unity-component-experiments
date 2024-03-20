@@ -8,4 +8,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/ModTheCube/Scene.unity
     guid: 0837f2ea600db39419ef0a366d70b9de
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 5562f5dc93a7fca49adb563325e38b3d, type: 2}
