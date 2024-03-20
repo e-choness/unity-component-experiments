@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Course_Library.Scripts.Player
+namespace Course_Library.Scripts.Obstacle
 {
     public class ObstacleMoveLeft : MonoBehaviour
     {

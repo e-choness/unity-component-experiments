@@ -1,7 +1,6 @@
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace Course_Library.Scripts.Player
+namespace Course_Library.Scripts.System
 {
     public class StateController : MonoBehaviour
     {

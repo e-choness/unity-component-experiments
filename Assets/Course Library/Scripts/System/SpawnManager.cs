@@ -1,8 +1,7 @@
-using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Course_Library.Scripts.Player
+namespace Course_Library.Scripts.System
 {
     public class SpawnManager : MonoBehaviour
     {

@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.EventSystems;
