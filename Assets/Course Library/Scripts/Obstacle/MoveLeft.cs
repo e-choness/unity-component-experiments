@@ -25,7 +25,7 @@ namespace Course_Library.Scripts.Obstacle
         private void HandleGameOver()
         {
             if (_player.GetGameOver()) return;
-            transform.Translate(Vector3.left * Time.deltaTime * _speed);
+            transform.Translate(Vector3.left * (Time.deltaTime * _speed));
         }
 
         private void Despawn()
