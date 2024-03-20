@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Course_Library.Scripts.Player
+namespace Course_Library.Scripts.System
 {
     public abstract class StateBase<T>
     {
