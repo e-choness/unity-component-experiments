@@ -6,33 +6,33 @@ namespace Course_Library.Scripts.Player
 {
     public class GameInput : MonoBehaviour
     {
-        [SerializeField] private StateController stateController;
-        [SerializeField] private float jumpForce;
-        private StateController _stateController;
+        [SerializeField] private float jumpForce = 100.0f;
+        
         private InputAction _playerJump;
-        private Rigidbody _playerRigidbody;
-        private MovementState _movementState;
+        private Rigidbody _rigidbody;
+
+        private float lateralGravityScale => Physics.gravity.y;
+
         private bool _isGrounded;
 
+        [Serializable]
         private enum MovementState
         {
-            Jumping,
+            Jump,
             Grounded
         };
         
         void Awake()
         {
-            TryGetComponent<StateController>(out _stateController);
-            TryGetComponent<Rigidbody>(out _playerRigidbody);
+            TryGetComponent<Rigidbody>(out _rigidbody);
             // _stateController = stateController.GetComponent<StateController>();
             
             var inputController = new InputController();
             
-            _movementState = MovementState.Grounded;
             _isGrounded = true;
             _playerJump = inputController.Player.Jump;
 
-            Physics.gravity = new Vector3(0.0f, -30.0f, 0.0f);
+            // Physics.gravity = new Vector3(0.0f, -30.0f, 0.0f);
         }
 
         private void OnEnable()
@@ -55,14 +55,19 @@ namespace Course_Library.Scripts.Player
             // _stateController.Jumping();
             if(_isGrounded)
             {
-                _playerRigidbody.velocity += Vector3.up * jumpForce;
+                _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                // _rigidbody.velocity += Vector3.up * jumpForce;
                 _isGrounded = false;
             }
         }
 
         void OnCancelJumping(InputAction.CallbackContext context)
         {
-            _playerRigidbody.velocity = Vector3.zero;
+            if (_isGrounded) return;
+            _rigidbody.AddForce(-transform.up * 10, ForceMode.VelocityChange);
+            
+            // var acceleration = Vector3.Lerp(Vector3.zero, -Vector3.up * jumpForce, 0.07f);
+            // _rigidbody.AddForce(acceleration, ForceMode.Impulse);
         }
 
         private void OnTriggerEnter(Collider other)
