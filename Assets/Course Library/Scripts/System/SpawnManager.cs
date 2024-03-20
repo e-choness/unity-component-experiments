@@ -1,5 +1,5 @@
+using Course_Library.Scripts.Player;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Course_Library.Scripts.System
 {
@@ -12,22 +12,25 @@ namespace Course_Library.Scripts.System
         [SerializeField] private float startDelay = 2.0f;
         [SerializeField] private float spawnTime = 2.0f;
     
+        // Spawn Positions
         private Vector3 _spawnPosition = new(30.0f, 0.0f, 0.0f);
-        private Vector3 _despawnPosition = new(-5.0f, 0.0f, 0.0f);
 
+        // Obstacle object
         private GameObject _obstacle;
+        
+        // Player Controller
+        private PlayerController _player;
 
         private void Start()
         {
-            
+            _player = FindAnyObjectByType<PlayerController>();
             InvokeRepeating(nameof(SpawnObstacle), startDelay, spawnTime);
-            // _obstacle = SpawnObstacle();
+            
         }
 
         private void Update()
         {
-            // DespawnObstacle(_obstacle);
-            spawnTime = Random.Range(1.5f, 3.0f);
+            CancelSpawn();
         }
 
         private GameObject SpawnObstacle()
@@ -35,12 +38,12 @@ namespace Course_Library.Scripts.System
             return Instantiate(obstaclePrefab, _spawnPosition, obstaclePrefab.transform.rotation);
         }
 
-        // private void DespawnObstacle(GameObject obstacle)
-        // {
-        //     if (obstacle.transform.position.x < _despawnPosition.x)
-        //     {
-        //         Destroy(obstacle);
-        //     }
-        // }
+        private void CancelSpawn()
+        {
+            if (_player.GetGameOver())
+            {
+                CancelInvoke(nameof(SpawnObstacle));
+            }
+        }
     }
 }

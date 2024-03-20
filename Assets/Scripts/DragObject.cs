@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,25 +8,24 @@ public class DragObject : MonoBehaviour
     private InputAction _screenPositionActionMap;
     private Rigidbody _rigidbody;
     
-    private Camera camera;
+    private Camera _camera;
     private Vector3 _cursorScreenPosition;
 
-    private Vector3 _worldPosition
+    private Vector3 WorldPosition
     {
         get
         {
-            float z = camera.WorldToScreenPoint(transform.position).z;
-            return camera.ScreenToWorldPoint(_cursorScreenPosition + new Vector3(0, 0, z));
+            float z = _camera.WorldToScreenPoint(transform.position).z;
+            return _camera.ScreenToWorldPoint(_cursorScreenPosition + new Vector3(0, 0, z));
         }
     }
     private bool _isDragging;
-    private bool _isClickedOn
+    private bool IsClickedOn
     {
         get
         {
-            Ray ray = camera.ScreenPointToRay(_cursorScreenPosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
+            var ray = _camera.ScreenPointToRay(_cursorScreenPosition);
+            if (Physics.Raycast(ray, out var hit))
             {
                 return hit.transform == transform;
             }
@@ -38,7 +36,7 @@ public class DragObject : MonoBehaviour
 
     private void Awake()
     {
-        camera = Camera.main;
+        _camera = Camera.main;
         var inputAction = new InputController();
         _pressActionMap = inputAction.MouseDragDrop.Press;
         _screenPositionActionMap = inputAction.MouseDragDrop.ScreenPosition;
@@ -51,20 +49,20 @@ public class DragObject : MonoBehaviour
         _screenPositionActionMap.Enable();
 
         _screenPositionActionMap.performed += context => { _cursorScreenPosition = context.ReadValue<Vector2>(); };
-        _pressActionMap.performed += _ => { if(_isClickedOn)StartCoroutine(DragCursor()); };
+        _pressActionMap.performed += _ => { if(IsClickedOn)StartCoroutine(DragCursor()); };
         _pressActionMap.canceled += _ => { _isDragging = false; };
     }
 
     private IEnumerator DragCursor()
     {
         _isDragging = true;
-        Vector3 offset = transform.position - _worldPosition;
+        var offset = transform.position - WorldPosition;
         // Starts to drag objects
         _rigidbody.useGravity = true;
         while (_isDragging)
         {
             // Dragging objects
-            transform.position = _worldPosition + offset;
+            transform.position = WorldPosition + offset;
             yield return null;
         }
         // Dropping objects
