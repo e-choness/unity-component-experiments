@@ -9,13 +9,22 @@ namespace Course_Library.Scripts.Player
 
         [Header("Gravity")] 
         [SerializeField] private float gravityMultiplier = 10.0f;
+        
+        [Header("Game Over State")] 
+        [SerializeField] private bool gameOver;
 
-        [Header("Game Over State")] [SerializeField]
-        private bool gameOver;
+        [Header("Visual Effects")] 
+        [SerializeField] private ParticleSystem explosionParticle;
+        [SerializeField] private ParticleSystem dirtParticle;
+
+        [Header("Sound Effects")] 
+        [SerializeField] private AudioClip jumpSound;
+        [SerializeField] private AudioClip crashSound;
         
         // Component references
         private Rigidbody _rigidbody;
         private Animator _animator;
+        private AudioSource _audio;
     
         private bool _isGrounded = true;
         private static readonly int JumpTrig = Animator.StringToHash("Jump_trig");
@@ -24,15 +33,16 @@ namespace Course_Library.Scripts.Player
 
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             _rigidbody = GetComponent<Rigidbody>();
             _animator = GetComponent<Animator>();
+            _audio = GetComponent<AudioSource>();
             Physics.gravity *= gravityMultiplier;
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             HandleJump();
         }
@@ -46,6 +56,8 @@ namespace Course_Library.Scripts.Player
                 _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                 _isGrounded = false;
                 _animator.SetTrigger(JumpTrig);
+                _audio.PlayOneShot(jumpSound, Random.Range(0.7f, 1.0f));
+                StopDirt();
             }
         }
 
@@ -54,6 +66,7 @@ namespace Course_Library.Scripts.Player
             if (other.gameObject.CompareTag("Ground"))
             {
                 _isGrounded = true;
+                PlayDirt();
             }else if (other.gameObject.CompareTag("Obstacle"))
             {
                 Debug.Log("Gotcha, game over!");
@@ -63,6 +76,15 @@ namespace Course_Library.Scripts.Player
                 
                 // Stop player animation
                 StopAnimation();
+                
+                // Play explosion particle effect
+                PlayExplosion();
+                
+                // Play crash sound
+                PlayCrashSound();
+                
+                // Stop dirt effect
+                StopDirt();
             }
         }
 
@@ -70,6 +92,25 @@ namespace Course_Library.Scripts.Player
         {
             _animator.SetBool(DeathB, true);
             _animator.SetInteger(DeathTypeINT, 1);
+        }
+
+        private void PlayExplosion()
+        {
+            explosionParticle.Play();
+        }
+
+        private void PlayDirt()
+        {
+            dirtParticle.Play();
+        }
+        private void StopDirt()
+        {
+            dirtParticle.Stop();
+        }
+
+        private void PlayCrashSound()
+        {
+            _audio.PlayOneShot(crashSound, 1.0f);
         }
 
         public bool GetGameOver()
