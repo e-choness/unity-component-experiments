@@ -4,10 +4,10 @@ namespace Course_Library.Scripts.Player
 {
     public class PlayerController : MonoBehaviour
     {
-        [Header("Physics")]
+        [Header("Movement")]
         [SerializeField] private float jumpForce = 100.0f;
 
-        [Header("Gravity")] 
+        [Header("Physics")] 
         [SerializeField] private float gravityMultiplier = 10.0f;
         
         [Header("Game Over State")] 
@@ -51,6 +51,11 @@ namespace Course_Library.Scripts.Player
         {
             if (gameOver) return;
             
+            Jump();
+        }
+
+        private void Jump()
+        {
             if (Input.GetKeyDown(KeyCode.Space) && _isGrounded)
             {
                 _rigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
