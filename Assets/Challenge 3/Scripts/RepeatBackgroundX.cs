@@ -1,26 +1,29 @@
 ﻿using UnityEngine;
 
-public class RepeatBackgroundX : MonoBehaviour
+namespace Challenge_3.Scripts
 {
-    private Vector3 startPos;
-    private float repeatWidth;
-
-    private void Start()
+    public class RepeatBackgroundX : MonoBehaviour
     {
-        startPos = transform.position; // Establish the default starting position 
-        repeatWidth = GetComponent<BoxCollider>().size.x / 2; // Set repeat width to half of the background
-    }
+        private Vector3 startPos;
+        private float repeatWidth;
 
-    private void Update()
-    {
-        // If background moves left by its repeat width, move it back to start position
-        if (transform.position.x < startPos.x - repeatWidth)
+        private void Start()
         {
-            transform.position = startPos;
+            startPos = transform.position; // Establish the default starting position 
+            repeatWidth = GetComponent<BoxCollider>().size.x / 2; // Set repeat width to half of the background
         }
-    }
+
+        private void Update()
+        {
+            // If background moves left by its repeat width, move it back to start position
+            if (transform.position.x < startPos.x - repeatWidth)
+            {
+                transform.position = startPos;
+            }
+        }
 
  
+    }
 }
 
 
