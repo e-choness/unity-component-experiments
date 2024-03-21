@@ -10,6 +10,8 @@ TagManager:
   - Bomb
   - Background
   - Celling
+  - PowerUp
+  - Enemy
   layers:
   - Default
   - TransparentFX
