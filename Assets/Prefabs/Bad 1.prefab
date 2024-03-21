@@ -35,7 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6465030732670035747
 MeshFilter:
@@ -116,7 +116,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5020478926706276521}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.02
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -168,3 +168,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66a8a84c336d4ee481881615785f1d76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minSpeed: 12
+  maxSpeed: 16
+  maxTorque: 10
+  xRange: 4
+  ySpawnPosition: 0
+  score: -10
+  explosionParticle: {fileID: 19821056, guid: 079954accd64b32419ec069129c81273, type: 3}
