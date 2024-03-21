@@ -37,8 +37,17 @@ public class PlayerControllerX : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameOver) return;
+        if (gameOver)
+        {
+            playerRb.constraints = RigidbodyConstraints.FreezePosition;
+            return;
+        }
         
+        FloatUp();
+    }
+
+    private void FloatUp()
+    {
         // While space is pressed and player is low enough, float up
         if (Input.GetKey(KeyCode.Space))
         {
