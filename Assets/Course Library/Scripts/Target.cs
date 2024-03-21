@@ -58,6 +58,7 @@ namespace Course_Library.Scripts
         private void OnMouseDown()
         {
             _gameManager.UpdateScore(score);
+            if (_gameManager.IsOver) return;
             Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
             Destroy(gameObject);
         }

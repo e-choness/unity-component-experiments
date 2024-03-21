@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Course_Library.Scripts.System
@@ -14,17 +16,23 @@ namespace Course_Library.Scripts.System
 
         [Header("UI Attributes")] 
         [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private GameObject pauseMenu;
+        [SerializeField] private Button restartButton;
 
+        // Game status
         private float _score;
+        public bool IsOver { get; private set; }
         private void Start()
         {
             StartCoroutine(SpawnTargets());
+            restartButton.onClick.AddListener(RestartGame);
             UpdateScore(0);
+            IsOver = false;
         }
 
         private IEnumerator SpawnTargets()
         {
-            while (true)
+            while (!IsOver)
             {
                 yield return new WaitForSeconds(spawnRate);
                 var index = GetRandomIndex();
@@ -41,6 +49,30 @@ namespace Course_Library.Scripts.System
         {
             _score += scoreUpdate;
             scoreText.text = $"Score: {_score}";
+        }
+
+        private void Update()
+        {
+            if (GameOver())
+            {
+                pauseMenu.SetActive(true);
+                return;
+            }
+        }
+
+        private bool GameOver()
+        {
+            if (_score < 0)
+            {
+                
+                return IsOver = true;
+            }
+            return IsOver = false;
+        }
+
+        public void RestartGame()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }
