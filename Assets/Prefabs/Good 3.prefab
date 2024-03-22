@@ -152,4 +152,5 @@ MonoBehaviour:
   xRange: 4
   ySpawnPosition: 0
   score: 15
+  missPenalty: -10
   explosionParticle: {fileID: 5112437202714306363, guid: 7b4191607aae74c0ab244a8d6e48adbf, type: 3}
