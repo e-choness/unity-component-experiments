@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,31 +9,63 @@ using Random = UnityEngine.Random;
 
 namespace Course_Library.Scripts.System
 {
+    [Serializable]
+    public enum State
+    {
+        Active,
+        Pause,
+        Over
+    }
     public class GameManager : MonoBehaviour
     {
         [Header("Spawn Attributes")] 
         [SerializeField] private List<GameObject> targets;
-        [SerializeField] private float spawnRate = 1.0f;
+        [SerializeField] private float spawnRate = 2.0f;
 
-        [Header("UI Attributes")] 
+        [Header("Game Score")]
         [SerializeField] private TextMeshProUGUI scoreText;
-        [SerializeField] private GameObject pauseMenu;
+        
+        [Header("Pause Menu")] 
+        [SerializeField] private GameObject gameOverMenu;
         [SerializeField] private Button restartButton;
+
+        [Header("Start Menu")]
+        [SerializeField] private GameObject startMenu;
+        [SerializeField] private List<Button> difficultyButtons;
 
         // Game status
         private float _score;
-        public bool IsOver { get; private set; }
+        [field: SerializeField] public State GameState { get; private set; } = State.Pause;
         private void Start()
         {
-            StartCoroutine(SpawnTargets());
-            restartButton.onClick.AddListener(RestartGame);
+            InitState();
+            InitStartMenu();
+            InitGameOverMenu();
+        }
+
+        private void InitState()
+        {
             UpdateScore(0);
-            IsOver = false;
+        }
+
+        private void InitStartMenu()
+        {
+            for(var i=0; i<difficultyButtons.Count; i++)
+            {
+                var i1 = i;
+                difficultyButtons[i].onClick.AddListener(delegate { SetDifficulty(i1 + 1);} );
+            }
+        }
+
+        private void InitGameOverMenu()
+        {
+            restartButton.onClick.AddListener(RestartGame);
+            gameOverMenu.SetActive(false);
         }
 
         private IEnumerator SpawnTargets()
         {
-            while (!IsOver)
+            while (GameState == State.Active)
             {
                 yield return new WaitForSeconds(spawnRate);
                 var index = GetRandomIndex();
@@ -53,26 +86,30 @@ namespace Course_Library.Scripts.System
 
         private void Update()
         {
-            if (GameOver())
-            {
-                pauseMenu.SetActive(true);
-                return;
-            }
+            GameOver();
         }
-
-        private bool GameOver()
+        
+        private void GameOver()
         {
             if (_score < 0)
             {
-                
-                return IsOver = true;
+                GameState = State.Over;
+                gameOverMenu.SetActive(true);
             }
-            return IsOver = false;
         }
 
         public void RestartGame()
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+
+
+        private void SetDifficulty(int difficulty)
+        {
+            spawnRate /= difficulty;
+            startMenu.SetActive(false);
+            GameState = State.Active;
+            StartCoroutine(SpawnTargets());
         }
     }
 }

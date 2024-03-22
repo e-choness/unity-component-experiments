@@ -19,6 +19,7 @@ namespace Course_Library.Scripts
 
         [Header("Score")]
         [SerializeField] private float score = 5.0f;
+        [SerializeField] private float missPenalty = -10.0f;
 
         [Header("Visual Effects")]
         [SerializeField] private ParticleSystem explosionParticle;
@@ -58,13 +59,14 @@ namespace Course_Library.Scripts
         private void OnMouseDown()
         {
             _gameManager.UpdateScore(score);
-            if (_gameManager.IsOver) return;
+            if (_gameManager.GameState == State.Over) return;
             Instantiate(explosionParticle, transform.position, explosionParticle.transform.rotation);
             Destroy(gameObject);
         }
 
         private void OnTriggerEnter(Collider other)
         {
+            _gameManager.UpdateScore(missPenalty);
             Destroy(gameObject);
         }
     }
